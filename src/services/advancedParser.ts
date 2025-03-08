@@ -4,7 +4,11 @@ import markdown from "markdown-it";
 import katex from "markdown-it-katex";
 import highlightjs from "markdown-it-highlightjs";
 
-const allowedOrigin = [window.location.origin, "https://pl.turtlesim.com", "https://physicslab.turtlesim.com"];
+const allowedOrigin = [
+  window.location.origin,
+  "https://pl.turtlesim.com",
+  "https://physicslab.turtlesim.com",
+];
 const allowedUrl = ["https://github.com/NetLogo-Mobile/Physics-Lab-Web"];
 
 const md = new markdown({
@@ -18,15 +22,16 @@ md.use(katex).use(highlightjs, {
 });
 
 md.core.ruler.before("normalize", "parseUnityRichText", function (state) {
+  const root = window.$getPath("/root");
   state.src = state.src
     .replace(/<user=(.*?)>(.*?)<\/user>/g, "<span class='RUser' data-user='$1'>$2</span>")
     .replace(
       /<discussion=(.*?)>(.*?)<\/discussion>/g,
-      `<a href="/ExperimentSummary/Discussion/$1" internal>$2</a>`
+      `<a href="${root}/ExperimentSummary/Discussion/$1" internal>$2</a>`
     )
     .replace(
       /<experiment=(.*?)>(.*?)<\/experiment>/g,
-      `<a href="/ExperimentSummary/Experiment/$1" internal>$2</a>`
+      `<a href="${root}/ExperimentSummary/Experiment/$1" internal>$2</a>`
     )
     .replace(/<b>(.*?)<\/b>/g, "<strong>$1</strong>") // 粗体
     .replace(/<i>(.*?)<\/i>/g, "<em>$1</em>") // 斜体
@@ -115,7 +120,7 @@ function parse(text: string | string[], isInline: boolean = false) {
     const origin = window.location.origin;
     try {
       const parsedUrl = new URL(url, origin);
-      console.log(allowedOrigin.includes(parsedUrl.origin))
+      console.log(allowedOrigin.includes(parsedUrl.origin));
       if (allowedOrigin.includes(parsedUrl.origin) || allowedUrl.includes(parsedUrl.href)) {
         return true;
       }
@@ -153,7 +158,7 @@ function parse(text: string | string[], isInline: boolean = false) {
         tag.remove();
       } else {
         tag.style.width = tag.getAttribute("width") || tag.style.width;
-        tag.style.height = tag.getAttribute("height") || tag.style.height ;
+        tag.style.height = tag.getAttribute("height") || tag.style.height;
         tag.style.maxWidth = "100%";
       }
     });

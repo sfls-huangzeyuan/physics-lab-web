@@ -49,7 +49,7 @@ const toggleFullScreen = () => {
 const logout = () => {
   localStorage.clear();
   Emitter.emit("info", "您已退出登录！", 1);
-  window.location.href = "/"; // 要刷新缓存，不能router.push()
+  window.location.href = window.$getPath("/root"); // 要刷新缓存，不能router.push()
 };
 </script>
 
