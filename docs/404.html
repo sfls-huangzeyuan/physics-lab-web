@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>重定向中...</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics Lab Web</title>
+    <link rel="shortut icon" href="/assets/icons/logo.png" type="image/png" />
+    <style>
+      .RUser {
+        color: cornflowerblue;
+      }
+      /* 带有internal的属性链接呈浅蓝色 */
+      a[internal] {
+        color: cornflowerblue;
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
-    <a href="/" id="a">Redirecting...</a>"
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
-  <script>
-    window.location.href = window.location.href;
-    ducument.getElementById("a").href = window.location.href;
-  </script>
 </html>
