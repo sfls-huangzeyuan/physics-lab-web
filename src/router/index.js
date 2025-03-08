@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import Emitter from "../services/eventEmitter";
 import Home from "../views/Home.vue";
 
@@ -65,22 +65,10 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   if (to.name === 'Home') {
-//     // 预加载 
-//     Promise.all([
-//       import('../components/messages/MessageList.vue')
-//     ]).then(() => {
-//       next();
-//     });
-//   } else {
-//     next();
-//   }
-// });
 
 Emitter.on("loginRequired", () => {
   router.push("/");
