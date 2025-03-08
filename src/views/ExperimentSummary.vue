@@ -56,7 +56,7 @@
                 <img
                   :src="avatarUrl"
                   style="margin: auto 10px; height: 90%; border-radius: 50%"
-                  onerror="this.src='/assets/user/default-avatar.png'"
+                  
                 />
                 <div style="text-align: left">
                   <p style="color: #007bff; margin: 3%; width: 100%">{{ data.User.Nickname }}</p>

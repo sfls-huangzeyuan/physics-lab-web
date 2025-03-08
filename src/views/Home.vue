@@ -6,7 +6,6 @@
           class="avatar"
           :src="user.avatarUrl"
           alt="Avatar"
-          onerror="this.src='/assets/user/default-avatar.png'"
         />
         <!-- 用户刚刚解封会出现图片404，或许日后要把这个逻辑改为获取用户上一张头像，先暂时用默认头像 -->
         <div class="user-info">

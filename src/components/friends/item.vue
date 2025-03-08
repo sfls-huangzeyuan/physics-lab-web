@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 0px 10px">
     <div class="user-item" @click="showUserCard(user.ID)">
-      <img class="avatar" :src="avararUrl" onerror="this.src='/assets/user/default-avatar.png'" />
+      <img class="avatar" :src="avararUrl" />
       <div class="info">
         <div class="username">{{ user.Nickname }}</div>
         <div class="signature">{{ user.Signature || "这个人很神秘，什么也没有写" }}</div>

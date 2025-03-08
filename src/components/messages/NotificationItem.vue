@@ -1,7 +1,7 @@
 <template>
   <div class="notification_container">
     <div class="img" @click="showUserCard(uid as string)">
-      <img :src="avatar_url" id="avatar" onerror="this.src='/assets/user/default-avatar.png'" />
+      <img :src="avatar_url" id="avatar" />
     </div>
     <div id="notification" class="notification" @click="showComment">
       <div id="notification_title" class="notification_title" v-html="parse(msg_title, true)"></div>
