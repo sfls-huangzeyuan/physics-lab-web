@@ -3,6 +3,7 @@ import getPath from "./getPath.ts";
 type PUser = {
   ID: string;
   Avatar: number;
+  Verification: string;
 };
 
 type PProjects = {
@@ -11,7 +12,7 @@ type PProjects = {
 };
 export function getUserUrl(user: PUser): string {
   const url =
-    user.Avatar === 0
+    user.Avatar === 0 || user.Verification === "Banned"
       ? "/assets/user/default-avatar.png"
       : `/static/users/avatars/${user.ID.slice(0, 4)}/${user.ID.slice(4, 6)}/${user.ID.slice(
           6,

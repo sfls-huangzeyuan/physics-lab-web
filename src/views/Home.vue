@@ -4,7 +4,7 @@
       <div class="user" @click="showModalFn">
         <img
           class="avatar"
-          :src="user.avatarUrl"
+          :src="user.avatarUrl || '/assets/user/default-avatar.png'"
           alt="Avatar"
           onerror="this.src='/assets/user/default-avatar.png'"
         />
