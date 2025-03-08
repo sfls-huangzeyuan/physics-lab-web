@@ -4,6 +4,9 @@ import vue from "@vitejs/plugin-vue";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  build: {
+    outDir: 'docs' // 改为目标目录
+  },
   server: {
     proxy: {
       // 代理/aliyun-oss
