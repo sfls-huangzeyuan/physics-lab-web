@@ -60,7 +60,8 @@ const starCount = ref(0);
 const fragmentCount = ref(0);
 
 const jumpToUser = (id) => {
-  window.open(`/profile/${id}`, "_self");
+  props.close();
+  window.open(`${window.$getPath("/root")}/profile/${id}`, "_self");
 };
 
 onMounted(async () => {
