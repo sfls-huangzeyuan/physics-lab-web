@@ -6,7 +6,6 @@
           class="avatar"
           :src="user.avatarUrl || '/assets/user/default-avatar.png'"
           alt="Avatar"
-          onerror="this.src='/assets/user/default-avatar.png'"
         />
         <!-- 用户刚刚解封会出现图片404，或许日后要把这个逻辑改为获取用户上一张头像，先暂时用默认头像 -->
         <div class="user-info">
@@ -160,6 +159,8 @@
 </template>
 
 <script setup lang="ts">
+// 直接获取值（无需转义）
+console.log(import.meta.env.VITE_HOME_URL) 
 import { ref, onMounted, computed, onUnmounted } from "vue";
 import Actions from "../components/Actions.vue";
 import Header from "../components/utils/Header.vue";

@@ -65,10 +65,22 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory("/Physics-Lab-Web/"),
   routes,
 });
 
+// router.beforeEach((to, from, next) => {
+//   if (to.name === 'Home') {
+//     // 预加载
+//     Promise.all([
+//       import('../components/messages/MessageList.vue')
+//     ]).then(() => {
+//       next();
+//     });
+//   } else {
+//     next();
+//   }
+// });
 
 Emitter.on("loginRequired", () => {
   router.push("/");

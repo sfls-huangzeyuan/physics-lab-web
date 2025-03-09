@@ -8,6 +8,10 @@ export default defineConfig({
     outDir: "./docs",
   },
   plugins: [vue()],
+  base: "./",
+  build: {
+    outDir: 'docs'
+  },
   server: {
     proxy: {
       // 代理/aliyun-oss
