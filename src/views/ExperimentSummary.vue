@@ -11,7 +11,13 @@
       <div style="text-align: left">
         <img src="/assets/library/Navigation-Return.png" style="width: 2.7em" @click="goBack" />
         <div
-          style="color: white; font-size: clamp(1.6em ,3.5vw,2em); text-align: left; position: relative; z-index: 30"
+          style="
+            color: white;
+            font-size: clamp(1.6em, 3.5vw, 2em);
+            text-align: left;
+            position: relative;
+            z-index: 30;
+          "
           v-html="parseInline(data.Subject)"
         ></div>
 
@@ -53,14 +59,15 @@
                 "
                 @click="showUserCard(data.User.ID)"
               >
-                <img
-                  :src="avatarUrl"
-                  style="margin: auto 10px; height: 90%; border-radius: 50%"
-                  
-                />
+                <img :src="avatarUrl" style="margin: auto 10px; height: 90%; border-radius: 50%" />
                 <div style="text-align: left">
-                  <p style="color: #007bff; margin: 3%; width: 100%">{{ data.User.Nickname }}</p>
-                  <p style="color: gray; margin: 0%; width: 100%" v-html="parseInline(data.User.Signature)"></p>
+                  <p style="color: #007bff; margin: 5% 0 2% 0; width: 100%; font-size: 16px">
+                    {{ data.User.Nickname }}
+                  </p>
+                  <p
+                    style="color: gray; margin: 0%; width: 100%"
+                    v-html="parseInline(data.User.Signature)"
+                  ></p>
                 </div>
               </div>
               <div
@@ -76,7 +83,9 @@
                 <h3 style="color: #007bff; text-align: left; margin-top: 2px; margin-bottom: 2px">
                   实验介绍
                 </h3>
-                <div style="left: 3%; width: 94%; height: 90%; max-width: 100%; word-break: break-all">
+                <div
+                  style="left: 3%; width: 94%; height: 90%; max-width: 100%; word-break: break-all"
+                >
                   <div style="text-align: left" v-html="parse(data.Description)"></div>
                   <div style="font-weight: bold; text-align: left">字数统计:</div>
                 </div>
@@ -124,6 +133,7 @@ import showUserCard from "../popup/usercard";
 import Emitter from "../services/eventEmitter.ts";
 import "highlight.js/styles/github.css";
 import "../../node_modules/katex/dist/katex.min.css";
+import { getUserUrl } from "../services/computedUrl.ts";
 
 let comment = ref("");
 let isLoading = ref(false); // 新增 loading 状态
@@ -142,16 +152,6 @@ const coverUrl = computed(
     )}/${route.params.id.slice(6, 8)}/${route.params.id.slice(8, 24)}/${
       data.value.Image || 0
     }.jpg!full`
-);
-
-const avatarUrl = computed(
-  () =>
-    `/static/users/avatars/${data.value.User.ID.slice(0, 4)}/${data.value.User.ID.slice(
-      4,
-      6
-    )}/${data.value.User.ID.slice(6, 8)}/${data.value.User.ID.slice(8, 24)}/${
-      data.value.User.Avatar
-    }.jpg!small.round`
 );
 
 const data = ref({
@@ -185,9 +185,11 @@ const data = ref({
     Avatar: 0,
     AvatarRegion: 0,
     Decoration: 0,
-    Verification: "Volunteer",
+    Verification: "Banned",
   },
 });
+
+let avatarUrl = getUserUrl(data.value.User);
 
 onMounted(async () => {
   const res = await getData(`/Contents/GetSummary`, {
@@ -195,14 +197,16 @@ onMounted(async () => {
     Category: route.params.category,
   });
   data.value = res.Data;
+  avatarUrl = getUserUrl(data.value.User);
 });
 
 function handleMsgClick(item: any) {
   replyID = item.userID;
   comment.value = `回复@${item.msg_title}: `;
 }
-// 新增方法：处理回车键按下事件
+// 处理回车键按下事件
 const handleEnter = async () => {
+  if (isLoading.value === true) return;
   isLoading.value = true; // 设置 loading 状态为 true
   const sendCommentResponse = await getData("/Messages/PostComment", {
     TargetID: route.params.id,
@@ -254,7 +258,6 @@ const goBack = () => {
   border-radius: 8px;
   z-index: 1;
 }
-
 
 .cover {
   object-fit: cover;

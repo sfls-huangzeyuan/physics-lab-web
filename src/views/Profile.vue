@@ -25,7 +25,7 @@
         style="
           margin-top: auto;
           color: white;
-          height: 40px;
+          height: 55px;
           background-color: rgba(128, 128, 128, 0.4);
           border-radius: 10px;
           padding: 8px;
@@ -55,7 +55,7 @@
     <div style="text-align: center" class="context">
       <n-tabs v-model:value="selectedTab" justify-content="space-evenly" type="line">
         <n-tab-pane name="Intro" tab="作品">
-          <div style="display: flex; flex-direction: column; gap: 5px" class="message-list">
+          <div style="display: flex; flex-direction: column; gap: 5px" class="message-list" id="project-list">
             <div v-for="[t, d] in Object.entries(expData)" :key="t">
               <Block v-if="d.length > 0" :title="t" :data="d" :block-type="d[0].Category" />
             </div>
@@ -230,6 +230,9 @@ const goBack = () => {
   }
   .message-list {
     height: calc(100dvh - 100px);
+  }
+  #project-list {
+    height: calc(100dvh - 60px);
   }
 }
 
