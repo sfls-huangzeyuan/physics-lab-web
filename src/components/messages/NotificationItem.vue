@@ -62,7 +62,7 @@ const msg_icon_url = computed(() => {
 
 function showComment() {
   if (props.msg_type === 2) {
-    window.open(`/Comments/${props.category}/${props.tid}/${props.name}`, "_self");
+    window.open(`${window.$getPath("/root")}/Comments/${props.category}/${props.tid}/${props.name}`, "_self");
   }
 }
 </script>
