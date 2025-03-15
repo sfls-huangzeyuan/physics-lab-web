@@ -159,8 +159,6 @@
 </template>
 
 <script setup lang="ts">
-// 直接获取值（无需转义）
-console.log(import.meta.env.VITE_HOME_URL) 
 import { ref, onMounted, computed, onUnmounted } from "vue";
 import Actions from "../components/Actions.vue";
 import Header from "../components/utils/Header.vue";

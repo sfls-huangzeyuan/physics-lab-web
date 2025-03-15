@@ -130,7 +130,7 @@ import MessageList from "../components/messages/MessageList.vue";
 import parse from "../services/advancedParser.ts";
 import parseInline from "../services/commonParser.ts";
 import showUserCard from "../popup/usercard";
-import Emitter from "../services/eventEmitter.ts";
+import postComment from "../services/postComment.ts";
 import "highlight.js/styles/github.css";
 import "../../node_modules/katex/dist/katex.min.css";
 import { getUserUrl } from "../services/computedUrl.ts";
@@ -138,7 +138,7 @@ import { getUserUrl } from "../services/computedUrl.ts";
 let comment = ref("");
 let isLoading = ref(false); // 新增 loading 状态
 let upDate = ref(1);
-let replyID = "";
+let replyID = ref("");
 
 const selectedTab = ref("Intro");
 
@@ -201,37 +201,19 @@ onMounted(async () => {
 });
 
 function handleMsgClick(item: any) {
-  replyID = item.userID;
+  replyID.value = item.userID;
   comment.value = `回复@${item.msg_title}: `;
 }
-// 处理回车键按下事件
+
 const handleEnter = async () => {
-  if (isLoading.value === true) return;
-  isLoading.value = true; // 设置 loading 状态为 true
-  const sendCommentResponse = await getData("/Messages/PostComment", {
-    TargetID: route.params.id,
-    TargetType: route.params.category,
-    Content: comment.value || "",
-    ReplyID: replyID || "",
-    Language: "from web",
-    Special: null,
-  });
-  if (sendCommentResponse.Status == 200) {
-    comment.value = "";
-    upDate.value = Math.random();
-  } else {
-    if (
-      sendCommentResponse.Status == 403 &&
-      sendCommentResponse.Message.startsWith("Stopword.Blocked")
-    ) {
-      const index = Number(
-        "Stopword.Blocked.Details|0".slice("Stopword.Blocked.Details|0".indexOf("|") + 1)
-      );
-      const blockedMessage = comment.value.slice(index, 10);
-      Emitter.emit("error", `您输入的内容“...${blockedMessage}...”中包含不适合词句`, 1);
-    }
-  }
-  isLoading.value = false;
+  await postComment(
+    comment,
+    isLoading,
+    route.params.category as string,
+    route.params.id as string,
+    replyID,
+    upDate
+  );
 };
 
 // 新增方法：返回上一页

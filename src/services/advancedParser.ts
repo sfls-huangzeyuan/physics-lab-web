@@ -120,7 +120,6 @@ function parse(text: string | string[], isInline: boolean = false) {
     const origin = window.location.origin;
     try {
       const parsedUrl = new URL(url, origin);
-      console.log(allowedOrigin.includes(parsedUrl.origin));
       if (allowedOrigin.includes(parsedUrl.origin) || allowedUrl.includes(parsedUrl.href)) {
         return true;
       }

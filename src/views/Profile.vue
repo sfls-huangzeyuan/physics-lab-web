@@ -96,12 +96,12 @@ import { NTabs, NTabPane } from "naive-ui";
 import Tag from "../components/utils/TagLarger.vue";
 import MessageList from "../components/messages/MessageList.vue";
 import Block from "../components/Block.vue";
-import Emitter from "../services/eventEmitter";
+import postComment from "../services/postComment.ts";
 
 let comment = ref("");
 let isLoading = ref(false);
 let upDate = ref(1);
-let replyID = "";
+let replyID = ref("");
 
 const selectedTab = ref("Intro");
 const route = useRoute();
@@ -166,36 +166,18 @@ onMounted(async () => {
 });
 
 function handleMsgClick(item: any) {
-  replyID = item.userID;
+  replyID.value = item.userID;
   comment.value = `回复@${item.msg_title}: `;
 }
-// 处理回车键按下事件
 const handleEnter = async () => {
-  isLoading.value = true; // 设置 loading 状态为 true
-  const sendCommentResponse = await getData("/Messages/PostComment", {
-    TargetID: route.params.id,
-    TargetType: "User",
-    Content: comment.value || "",
-    ReplyID: replyID || "",
-    Language: "from web",
-    Special: null,
-  });
-  if (sendCommentResponse.Status == 200) {
-    comment.value = "";
-    upDate.value = Math.random();
-  } else {
-    if (
-      sendCommentResponse.Status == 403 &&
-      sendCommentResponse.Message.startsWith("Stopword.Blocked")
-    ) {
-      const index = Number(
-        "Stopword.Blocked.Details|0".slice("Stopword.Blocked.Details|0".indexOf("|") + 1)
-      );
-      const blockedMessage = comment.value.slice(index, 10);
-      Emitter.emit("error", `您输入的内容“...${blockedMessage}...”中包含不适合词句`, 1);
-    }
-  }
-  isLoading.value = false;
+  await postComment(
+    comment,
+    isLoading,
+    "User",
+    route.params.id as string,
+    replyID,
+    upDate
+  );
 };
 
 const goBack = () => {
