@@ -95,7 +95,7 @@ import { getData } from "../services/getData.ts";
 import { NTabs, NTabPane } from "naive-ui";
 import Tag from "../components/utils/TagLarger.vue";
 import MessageList from "../components/messages/MessageList.vue";
-import Block from "../components/Block.vue";
+import Block from "../components/blocks/Block.vue";
 import postComment from "../services/postComment.ts";
 
 let comment = ref("");

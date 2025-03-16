@@ -25,9 +25,9 @@
 </template>
 
 <script setup>
-import Works from "./projects/brief.vue";
-import router from "../router";
-import { getCoverUrl } from "../services/computedUrl.ts";
+import Works from "../projects/brief.vue";
+import router from "../../router";
+import { getCoverUrl } from "../../services/computedUrl.ts";
 const { projects, type, link } = defineProps({
   projects: Array,
   type: String,

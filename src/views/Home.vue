@@ -18,7 +18,7 @@
             <span>{{ user.coins }}</span>
           </div>
           <div class="resource">
-            <img class="icon" src="/assets/icons/gems.png" alt="Gems" />
+            <img class="icon gems" src="/assets/icons/gems.png" alt="Gems" />
             <span>{{ user.gems }}</span>
           </div>
         </div>
@@ -32,7 +32,10 @@
           <n-gi>
             <Actions />
           </n-gi>
-          <n-gi v-for="block in  blocks.filter((i:any)=>i.Summaries.length > 0)" :key="block.Subject">
+          <n-gi
+            v-for="block in  blocks.filter((i:any)=>i.Summaries.length > 0)"
+            :key="block.Subject"
+          >
             <div class="block">
               <BlockAndActivity
                 v-if="block.$type.startsWith('Quantum.Models.Contents.TopicBlock')"
@@ -160,15 +163,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, onUnmounted } from "vue";
-import Actions from "../components/Actions.vue";
+import Actions from "../components/blocks/Actions.vue";
 import Header from "../components/utils/Header.vue";
-import BlockAndActivity from "../components/BlockAndActivity.vue";
-import Block from "../components/Block.vue";
+import BlockAndActivity from "../components/blocks/BlockAndActivity.vue";
+import Block from "../components/blocks/Block.vue";
 import { login } from "../services/getData.ts";
-import Footer from "../components/Footer.vue";
+import Footer from "../components/utils/Footer.vue";
 import { NButton, NModal, NForm, NInput, NFormItemRow, NGi, NGrid } from "naive-ui";
 import router from "../router";
-import targetLink from "../services/targetLink.js"; 
+import targetLink from "../services/targetLink.js";
 
 const showModal = ref(false);
 const loading = ref(true);
@@ -178,14 +181,13 @@ const password = ref("");
 const token = ref("");
 const authCode = ref("");
 
-
 const user = ref({
   coins: 12345,
   gems: 12345,
   level: 12,
   username: "点击登录",
   avatarUrl: "/assets/user/default-avatar.png",
-  ID:""
+  ID: "",
 });
 
 const itemsPerRow = ref(getItemsPerRow());
@@ -226,7 +228,6 @@ async function loginDecorator(callback: Function) {
   loading.value = false;
 
   blocks.value = loginResponse.Data.Library.Blocks;
-
 }
 
 function getItemsPerRow() {
@@ -259,7 +260,9 @@ onMounted(async () => {
 });
 
 function showModalFn() {
-  localStorage.getItem("loginStatus") === "true"? router.push(`/profile/${user.value.ID}`): (showModal.value = true);
+  localStorage.getItem("loginStatus") === "true"
+    ? router.push(`/profile/${user.value.ID}`)
+    : (showModal.value = true);
 }
 
 async function pswdLogin() {
@@ -276,7 +279,6 @@ const memoryMe = ref(false);
 </script>
 
 <style scoped>
-
 .loading {
   position: fixed;
   top: 70px;
@@ -343,6 +345,11 @@ const memoryMe = ref(false);
   height: 20px;
   margin-right: 5px;
   margin-left: 5px;
+}
+
+.gems {
+  height: 28px;
+  width: 28px;
 }
 
 .inputArea {

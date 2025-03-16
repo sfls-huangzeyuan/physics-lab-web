@@ -42,9 +42,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import Header from "../components/utils/Header.vue";
-import BlockAndActivity from "../components/BlockAndActivity.vue";
-import Block from "../components/Block.vue";
-import Footer from "../components/Footer.vue";
+import BlockAndActivity from "../components/blocks/BlockAndActivity.vue";
+import Block from "../components/blocks/Block.vue";
+import Footer from "../components/utils/Footer.vue";
 import { getData } from "../services/getData.ts";
 import { NGrid, NGi } from "naive-ui";
 import targetLink from "../services/targetLink.js"; 

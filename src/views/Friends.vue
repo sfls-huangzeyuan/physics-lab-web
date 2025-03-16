@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import UserList from "../components/friends/list.vue";
 import Header from "../components/utils/Header.vue";
-import Footer from "../components/Footer.vue";
+import Footer from "../components/utils/Footer.vue";
 import { NTabs, NTabPane } from "naive-ui";
 import { onMounted, onUnmounted, ref } from "vue";
 

@@ -9,8 +9,8 @@
 </template>
 
 <script setup>
-import Detailed from "../components/projects/detailed.vue";
-import router from "../router";
+import Detailed from "../projects/detailed.vue";
+import router from "../../router";
 const { link } = defineProps({
   data: Array,
   title: String,
