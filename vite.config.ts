@@ -6,6 +6,17 @@ export default defineConfig({
   base: "./",
   build: {
     outDir: "./docs",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vue: ["vue", "vue-router"],
+          markdown: ["markdown-it"],
+          heilight: ["markdown-it-highlightjs"],
+          katex: ["markdown-it-katex"],
+          domPurify: ["dompurify"],
+        }
+      }
+    }
   },
   plugins: [vue()],
   server: {

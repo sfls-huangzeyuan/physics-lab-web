@@ -2,7 +2,7 @@ import DOMPurify from "dompurify";
 import markdown from "markdown-it";
 // @ts-ignore
 import katex from "markdown-it-katex";
-import highlightjs from "markdown-it-highlightjs";
+
 
 const allowedOrigin = [
   window.location.origin,
@@ -16,9 +16,54 @@ const md = new markdown({
   linkify: true,
 });
 
-md.use(katex).use(highlightjs, {
+// advancedParser.ts 修改以下部分
+
+// 替换原有highlightjs引入
+import hljs from 'highlight.js/lib/core';
+// @ts-ignore
+import markdownItHighlightjs from 'markdown-it-highlightjs/dist/core';
+
+
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import xml from 'highlight.js/lib/languages/xml';
+import css from 'highlight.js/lib/languages/css';
+import python from 'highlight.js/lib/languages/python';
+import java from 'highlight.js/lib/languages/java';
+import cpp from 'highlight.js/lib/languages/cpp';
+import csharp from 'highlight.js/lib/languages/csharp';
+import php from 'highlight.js/lib/languages/php';
+import ruby from 'highlight.js/lib/languages/ruby';
+import swift from 'highlight.js/lib/languages/swift';
+import go from 'highlight.js/lib/languages/go';
+import sql from 'highlight.js/lib/languages/sql';
+import json from 'highlight.js/lib/languages/json';
+import bash from 'highlight.js/lib/languages/bash';
+import shell from 'highlight.js/lib/languages/shell';
+import yaml from 'highlight.js/lib/languages/yaml';
+import dockerfile from 'highlight.js/lib/languages/dockerfile';
+import nginx from 'highlight.js/lib/languages/nginx';
+import rust from 'highlight.js/lib/languages/rust';
+import kotlin from 'highlight.js/lib/languages/kotlin';
+import scala from 'highlight.js/lib/languages/scala';
+import perl from 'highlight.js/lib/languages/perl';
+
+[
+  javascript, typescript, xml, css, python,
+  java, cpp, csharp, php, ruby, swift, go,
+  sql, json, bash, shell, yaml, markdown,
+  dockerfile, nginx, rust, kotlin, scala, perl
+].forEach(lang => {
+  // @ts-ignore
+  hljs.registerLanguage(lang.name, lang);
+});
+
+
+// 修改插件初始化方式
+md.use(katex).use(markdownItHighlightjs, {
+  hljs, 
   inline: true,
-  auto: true,
+  auto: true
 });
 
 md.core.ruler.before("normalize", "parseUnityRichText", function (state) {
@@ -181,3 +226,7 @@ function parse(text: string | string[], isInline: boolean = false) {
 }
 
 export default parse;
+
+// 在文件末尾添加验证代码（调试后移除）
+console.log('Loaded languages:', hljs.listLanguages());
+

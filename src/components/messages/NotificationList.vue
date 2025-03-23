@@ -27,6 +27,7 @@ import { getData } from "../../services/getData.ts";
 import { getAvatarUrl, saveCache } from "../../services/getUserCurentAvatarByID";
 import type { Ref } from "vue";
 import Emitter from "../../services/eventEmitter";
+import { NInfiniteScroll } from "naive-ui";
 
 interface Message {
   ID: number;
