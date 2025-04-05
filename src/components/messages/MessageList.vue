@@ -10,7 +10,9 @@
         :msg_type="item.msg_type"
         :id="item.id"
         :userID="item.userID"
+        :type="Category"
         @msgClick="handleMsgClick"
+        @deleteMsg="deleteMsg"
       ></MessageItem>
       <n-divider style="margin: 0" />
     </div>
@@ -41,6 +43,10 @@ let skip = 0;
 let from: any = null;
 
 const emit = defineEmits(["msgClick"]);
+
+function deleteMsg(id: any) {
+  items.value = items.value.filter((item: any) => item.id !== id);
+}
 
 function handleMsgClick(id: any) {
   const msg = items.value.find((item: any) => item.id === id);
