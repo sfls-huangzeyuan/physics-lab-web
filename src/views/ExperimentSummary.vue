@@ -251,10 +251,11 @@ const goBack = () => {
   position: absolute;
   width:98%;
   margin: 5px;
-  height: calc(100% - 60px);
+  height: calc(100% - 70px);
   overflow-y: scroll;
   border-radius: 10px;
   background-color: #eee;
+  margin-bottom: 10px;
 }
 
 @media (min-aspect-ratio: 1/1) {
@@ -263,7 +264,7 @@ const goBack = () => {
   }
 }
 
-.div {
+div {
   box-sizing: border-box;
 }
 </style>
