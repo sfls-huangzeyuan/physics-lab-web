@@ -235,6 +235,8 @@ const handleEnter = async () => {
 const goBack = () => {
   window.history.back();
 };
+
+window.$parse = parse;
 </script>
 
 <style scoped>

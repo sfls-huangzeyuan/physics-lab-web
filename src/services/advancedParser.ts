@@ -95,21 +95,12 @@ function parse_size(text: string) {
   });
 }
 
-/**
- * 将unity富文本解析为Html，样式写在index.html，含有Ruser
- *
- * @function
- * @name parse
- * @kind function
- * @param {type} params
- * @returns {void}
- * @exports
- */
 
 /**
  * 丰富的解析引擎，含有Katex等
  * @param text 文本
  * @param isInline 为真会不输出换行和size标签
+ * @author Arendelle
  * @returns
  */
 function parse(text: string | string[], isInline: boolean = false) {
@@ -225,7 +216,3 @@ function parse(text: string | string[], isInline: boolean = false) {
 }
 
 export default parse;
-
-// 在文件末尾添加验证代码（调试后移除）
-console.log('Loaded languages:', hljs.listLanguages());
-

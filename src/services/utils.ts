@@ -1,5 +1,3 @@
-import getPath from "./getPath.ts";
-
 type PUser = {
   ID: string;
   Avatar: number;
@@ -19,7 +17,7 @@ export function getUserUrl(user: PUser): string {
           8
         )}/${user.ID.slice(8, 24)}/${user.Avatar}.jpg`;
 
-  return getPath(url);
+  return window.$getPath(url);
 }
 
 export function getCoverUrl(data: PProjects): string {
@@ -27,5 +25,5 @@ export function getCoverUrl(data: PProjects): string {
     4,
     6
   )}/${data.ID.slice(6, 8)}/${data.ID.slice(8, 24)}/${data.Image || 0}.jpg!block`;
-  return getPath(url);
+  return window.$getPath(url);
 }
