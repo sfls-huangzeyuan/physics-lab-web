@@ -147,7 +147,7 @@ import showUserCard from "../popup/usercard";
 import postComment from "../services/postComment.ts";
 import "highlight.js/styles/github.css";
 import "../../node_modules/katex/dist/katex.min.css";
-import { getUserUrl } from "../services/computedUrl.ts";
+import { getUserUrl } from "../services/utils.ts";
 import Adaptation from "../layout/Adaptation.vue";
 import "../layout/AdaptationView.css";
 

@@ -19,7 +19,7 @@
 <script setup>
 import { computed } from "vue";
 import parse from "../../services/commonParser.ts";
-import { getCoverUrl } from "../../services/computedUrl.ts";
+import { getCoverUrl } from "../../services/utils.ts";
 
 const { data, type } = defineProps({
   data: Object,
@@ -86,4 +86,4 @@ a {
   box-sizing:border-box;
 }
 
-</style>
+</style>../../services/utils.ts

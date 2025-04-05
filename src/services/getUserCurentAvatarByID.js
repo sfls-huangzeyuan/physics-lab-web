@@ -1,5 +1,5 @@
 import { getData } from "./getData";
-import { getUserUrl } from "./computedUrl";
+import { getUserUrl } from "./utils";
 
 let cache = JSON.parse(localStorage.getItem("userIDAndAvartarIDMap")) || {};
 

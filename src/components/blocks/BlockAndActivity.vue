@@ -27,7 +27,7 @@
 <script setup>
 import Works from "../projects/brief.vue";
 import router from "../../router";
-import { getCoverUrl } from "../../services/computedUrl.ts";
+import { getCoverUrl } from "../../services/utils.ts";
 const { projects, type, link } = defineProps({
   projects: Array,
   type: String,
@@ -105,3 +105,4 @@ const jump = () => {
   box-sizing:border-box;
 }
 </style>
+../../services/utils.ts

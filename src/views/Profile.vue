@@ -22,25 +22,13 @@
           <Tag :tag="'粉丝 ' + userData.Statistic.FollowerCount"></Tag>
           <Tag :tag="'关注 ' + userData.Statistic.FollowingCount"></Tag>
         </div>
-        <div
-          style="
-            position: absolute;
-            bottom: 30px;
-            left: 20px;
-            right: 20px;
-            color: white;
-            height: 55px;
-            background-color: rgba(128, 128, 128, 0.4);
-            border-radius: 10px;
-            padding: 8px;
-          "
-        >
+        <div class="coverProject" v-if="userData.Statistic?.Cover">
           <router-link
             :to="
               '/experimentSummary/' +
-              userData.Statistic.Cover.Category +
+              userData.Statistic.Cover?.Category +
               '/' +
-              userData.Statistic.Cover.ID
+              userData.Statistic.Cover?.ID
             "
             style="
               color: white;
@@ -51,7 +39,7 @@
             "
           >
             <p style="margin: 0; font-size: smaller">点击进入封面作品</p>
-            <p style="margin: 0; font-size: medium">{{ userData.Statistic.Cover.Subject }}</p>
+            <p style="margin: 0; font-size: medium">{{ userData.Statistic.Cover?.Subject }}</p>
           </router-link>
         </div>
       </div>
@@ -107,6 +95,7 @@ import Block from "../components/blocks/Block.vue";
 import postComment from "../services/postComment.ts";
 import Adaptation from "../layout/Adaptation.vue";
 import "../layout/AdaptationView.css";
+import { getCoverUrl, getUserUrl } from "../services/utils.ts";
 
 let comment = ref("");
 let isLoading = ref(false);
@@ -166,13 +155,9 @@ onMounted(async () => {
     ID: route.params.id,
   });
   userData.value = userRes.Data;
-  const coverID = userData.value.Statistic.Cover.ID;
-  coverUrl.value = `/static/experiments/images/${coverID.slice(0, 4)}/${coverID.slice(
-    4,
-    6
-  )}/${coverID.slice(6, 8)}/${coverID.slice(8, 24)}/${
-    userData.value.Statistic.Cover.Image
-  }.jpg!full`;
+  coverUrl.value = userData.value.Statistic.Cover
+    ? getCoverUrl(userData.value.Statistic.Cover)
+    : getUserUrl(userRes.Data.User);
 });
 
 function handleMsgClick(item: any) {
@@ -198,12 +183,30 @@ const goBack = () => {
 
 .projects {
   position: absolute;
-  width: 100%;
+  width: 95%;
   height: calc(100% - 50px);
+  margin:5px;
   display: flex;
   flex-direction: column;
   gap: 5px;
   overflow-y: scroll;
   padding-bottom: 50px;
+  scrollbar-width: none;
+}
+
+.coverProject {
+  position: absolute;
+  bottom: 30px;
+  left: 20px;
+  right: 20px;
+  color: white;
+  height: 55px;
+  background-color: rgba(128, 128, 128, 0.4);
+  border-radius: 10px;
+  padding: 8px;
+}
+
+div {
+  box-sizing: border-box;
 }
 </style>

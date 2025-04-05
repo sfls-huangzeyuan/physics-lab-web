@@ -21,7 +21,7 @@
 import Tag from "../utils/Tag.vue";
 import { computed } from "vue";
 import parse from "../../services/commonParser.ts";
-import { getCoverUrl } from "../../services/computedUrl";
+import { getCoverUrl } from "../../services/utils";
 
 const { data, type } = defineProps({
   data: Object,
@@ -74,3 +74,4 @@ div {
   box-sizing: border-box;
 }
 </style>
+../../services/utils.ts
