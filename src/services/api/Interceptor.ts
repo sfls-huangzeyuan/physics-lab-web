@@ -45,6 +45,7 @@ function rateLimit(path: string): boolean {
   return false;
 }
 
+// @ts-ignore
 export function beforeRequest(path: string, body: any): IIntercetporResponse {
   window.$message.destroyAll();
   if (rateLimit(path)) {
