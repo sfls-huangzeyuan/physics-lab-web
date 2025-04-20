@@ -11,16 +11,7 @@
       >
         <div style="text-align: left">
           <img src="/assets/library/Navigation-Return.png" style="width: 2.7em" @click="goBack" />
-          <div
-            style="
-              color: white;
-              font-size: clamp(1.6em, 3.5vw, 2em);
-              text-align: left;
-              position: relative;
-              z-index: 30;
-            "
-            v-html="parseInline(data.Subject)"
-          ></div>
+          <div class="title" v-html="parseInline(data.Subject)"></div>
           <div style="position: absolute; z-index: 100">
             <Tag
               :tag="route.params.category as string"
@@ -34,15 +25,7 @@
             class="btns"
             style="display: flex; justify-content: center; justify-content: space-around"
           >
-            <n-button
-              type="info"
-              strong
-              round
-              disabled
-              style="position: absolute; padding: 10px 10%; width: 80%; bottom: 50px"
-            >
-              进入实验
-            </n-button>
+            <n-button type="info" strong round disabled class="enter"> 进入实验 </n-button>
           </div>
         </div>
       </div>
@@ -90,13 +73,7 @@
                   <h3 style="color: #007bff; text-align: left; margin-top: 2px; margin-bottom: 2px">
                     实验介绍
                   </h3>
-                  <div
-                    style="
-                      height: 90%;
-                      max-width: 100%;
-                      word-break: break-all;
-                    "
-                  >
+                  <div style="height: 90%; max-width: 100%; word-break: break-all">
                     <div style="text-align: left" v-html="parse(data.Description)"></div>
                     <div style="font-weight: bold; text-align: left">字数统计:</div>
                   </div>
@@ -240,6 +217,13 @@ window.$parse = parse;
 </script>
 
 <style scoped>
+.title {
+  color: white;
+  font-size: 1.5em;
+  text-align: left;
+  position: relative;
+  z-index: 30;
+}
 .cover {
   object-fit: cover;
   padding: 20px;
@@ -248,10 +232,12 @@ window.$parse = parse;
   width: 100%;
   box-sizing: border-box;
 }
-
+.enter {
+  display: none;
+}
 .gray {
   position: absolute;
-  width:98%;
+  width: 98%;
   margin: 5px;
   height: calc(100% - 70px);
   overflow-y: scroll;
@@ -263,6 +249,16 @@ window.$parse = parse;
 @media (min-aspect-ratio: 1/1) {
   .gray {
     width: calc(100% - 30px);
+  }
+  .title {
+    font-size: x-large;
+  }
+  .enter {
+    display: flex;
+    position: absolute;
+    padding: 10px 10%;
+    width: 80%;
+    bottom: 50px;
   }
 }
 

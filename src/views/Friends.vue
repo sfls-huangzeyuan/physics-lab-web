@@ -5,22 +5,22 @@
   <div class="list">
     <n-tabs default-value="following" justify-content="space-evenly" type="line">
       <n-tab-pane name="following" tab="关注">
-        <div class="item"><UserList :userid="userID" type="1" :cols="itemsPerRow" :height="`calc(100dvh - 180px)`" /></div>
+        <div class="item"><UserList :userid="userID" type="1" :cols="itemsPerRow" /></div>
       </n-tab-pane>
       <n-tab-pane name="follower" tab="粉丝">
-        <div class="item"><UserList :userid="userID" type="0" :cols="itemsPerRow" :height="`calc(100dvh - 180px)`" /></div>
+        <div class="item"><UserList :userid="userID" type="0" :cols="itemsPerRow" /></div>
       </n-tab-pane>
       <n-tab-pane name="volunteers" tab="志愿者">
-        <div class="item"><UserList :userid="userID" type="3" :cols="itemsPerRow" :height="`calc(100dvh - 180px)`" /></div>
+        <div class="item"><UserList :userid="userID" type="3" :cols="itemsPerRow" /></div>
       </n-tab-pane>
       <n-tab-pane name="editors" tab="编辑和管理员">
-        <div class="item"><UserList :userid="userID" type="4" :cols="itemsPerRow" :height="`calc(100dvh - 180px)`" /></div>
+        <div class="item"><UserList :userid="userID" type="4" :cols="itemsPerRow" /></div>
       </n-tab-pane>
       <n-tab-pane name="en" tab="荣休编辑">
-        <div class="item"><UserList :userid="userID" type="5" :cols="itemsPerRow" :height="`calc(100dvh - 180px)`" /></div>
+        <div class="item"><UserList :userid="userID" type="5" :cols="itemsPerRow" /></div>
       </n-tab-pane>
       <n-tab-pane name="baned" tab="小黑屋">
-        <div class="item"><UserList :userid="userID" type="2" :cols="itemsPerRow" :height="`calc(100dvh - 180px)`" /></div>
+        <div class="item"><UserList :userid="userID" type="2" :cols="itemsPerRow" /></div>
       </n-tab-pane>
     </n-tabs>
   </div>
@@ -57,12 +57,15 @@ onUnmounted(() => {
 
 <style scoped>
 .list {
+  width: 100%;
   margin-top: 50px;
-  height: calc(100dvh - 100px);
 }
 
 .item {
-  overflow-y: scroll;
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 120px);
+  overflow-x: hidden;
   background-color: #ccc3;
 }
 </style>

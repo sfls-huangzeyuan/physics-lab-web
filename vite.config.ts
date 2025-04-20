@@ -1,5 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import autoprefixer from 'autoprefixer'; 
+
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,11 +16,16 @@ export default defineConfig({
           heilight: ["markdown-it-highlightjs"],
           katex: ["markdown-it-katex"],
           domPurify: ["dompurify"],
-        }
-      }
-    }
+        },
+      },
+    },
   },
   plugins: [vue()],
+  css: {
+    postcss: {
+      plugins: [autoprefixer()],
+    },
+  },
   server: {
     proxy: {
       // 代理/aliyun-oss

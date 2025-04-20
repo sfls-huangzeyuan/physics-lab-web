@@ -2,7 +2,6 @@
   position: absolute;
   width: 95%;
   height: calc(100% - 60px);
-  position: absolute;
   overflow-x: hidden;
 }
 

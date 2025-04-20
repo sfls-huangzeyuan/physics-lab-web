@@ -1,6 +1,6 @@
 <template>
   <!-- 无限滚动组件 -->
-  <n-infinite-scroll :distance="10" @load="handleLoad" style="height: 100%">
+  <n-infinite-scroll :distance="0" @load="handleLoad" style="height: 100%">
     <!-- 遍历显示每一条消息 -->
     <div v-for="item in items" :key="item.id">
       <MessageItem

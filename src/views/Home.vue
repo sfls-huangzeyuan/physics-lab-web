@@ -173,6 +173,7 @@ import { NButton, NModal, NForm, NInput, NFormItemRow, NGi, NGrid } from "naive-
 import router from "../router";
 import targetLink from "../services/targetLink.js";
 import "../layout/loading.css";
+import "../layout/startPage.css"
 
 const showModal = ref(false);
 const loading = ref(true);
@@ -280,13 +281,6 @@ const memoryMe = ref(false);
 </script>
 
 <style scoped>
-.block-container {
-  height: calc(100dvh - 50px);
-  padding: 70px 20px 10px 20px;
-  overflow-y: scroll;
-  box-sizing: border-box;
-  scrollbar-width: none;
-}
 
 /* Header插槽 start */
 .user {

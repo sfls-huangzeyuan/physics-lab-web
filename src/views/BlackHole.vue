@@ -47,8 +47,9 @@ import Block from "../components/blocks/Block.vue";
 import Footer from "../components/utils/Footer.vue";
 import { getData } from "../services/getData.ts";
 import { NGrid, NGi } from "naive-ui";
-import targetLink from "../services/targetLink.js"; 
-import "../layout/loading.css"
+import targetLink from "../services/targetLink.js";
+import "../layout/loading.css";
+import "../layout/startPage.css";
 
 const loading = ref(true);
 const blocks = ref<any>([]);
@@ -95,13 +96,4 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped>
-
-.block-container {
-  height: calc(100dvh - 50px);
-  padding: 70px 20px 10px 20px;
-  overflow-y: scroll;
-  box-sizing: border-box;
-  scrollbar-width: none;
-}
-</style>
+<style scoped></style>

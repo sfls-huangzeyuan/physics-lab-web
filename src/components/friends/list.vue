@@ -1,13 +1,11 @@
 <template>
-  <div class="user-list">
-    <n-infinite-scroll :distance="0" @load="handleLoad" :style="`height: ${height}`">
-      <n-grid :cols="cols || 2">
-        <n-gi v-for="user in relations" :key="user.User.ID">
-          <UserItem :user="user.User" />
-        </n-gi>
-      </n-grid>
-    </n-infinite-scroll>
-  </div>
+  <n-infinite-scroll :distance="10" @load="handleLoad" style="height: 100%" >
+    <n-grid :cols="cols || 2">
+      <n-gi v-for="user in relations" :key="user.User.ID">
+        <UserItem :user="user.User" />
+      </n-gi>
+    </n-grid>
+  </n-infinite-scroll>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +19,6 @@ const { userid, type } = defineProps({
   userid: String,
   type: String,
   cols: Number,
-  height: String,
 });
 
 let relations = ref<any>([]);
@@ -55,11 +52,4 @@ async function handleLoad() {
 handleLoad();
 </script>
 
-<style scoped>
-.user-list {
-  padding-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-</style>
+<style scoped></style>
