@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import autoprefixer from 'autoprefixer'; 
-
+import autoprefixer from "autoprefixer";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -30,7 +29,7 @@ export default defineConfig({
     proxy: {
       // 代理/aliyun-oss
       "/static": {
-        target: "http://physics-static-cn.turtlesim.com:80",
+        target: "https://physics-static-cn.turtlesim.com",
         changeOrigin: true,
         rewrite: (path) => {
           return path.replace("/static", "");
@@ -38,9 +37,10 @@ export default defineConfig({
         headers: {
           Referer: "https://www.turtlesim.com/",
         },
+        secure: false, // 关闭 TLS 验证
       },
       "/api": {
-        target: "http://physics-api-cn.turtlesim.com:80",
+        target: "https://physics-api-cn.turtlesim.com",
         changeOrigin: true,
         rewrite: (path) => {
           console.log(path.replace("/api", ""));

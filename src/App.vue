@@ -42,4 +42,4 @@ body {
   background-color: white;
 }
 
-</style>
+</style>./services/api/getPath.ts

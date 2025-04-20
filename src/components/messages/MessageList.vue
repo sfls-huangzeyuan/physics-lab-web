@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import MessageItem from "./MessageItem.vue";
-import { getData } from "../../services/getData.ts";
+import { getData } from "../../services/api/getData.ts";
 import type { PropType } from "vue";
 import Emitter from "../../services/eventEmitter.ts";
 import { NInfiniteScroll } from "naive-ui";
@@ -118,3 +118,4 @@ watch(
   color: #888;
 }
 </style>
+../../services/api/getData.ts

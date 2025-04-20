@@ -43,7 +43,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { getData } from "../../services/getData.ts";
+import { getData } from "../../services/api/getData.ts";
 
 const props = defineProps({
   userid: String,
@@ -167,3 +167,4 @@ onMounted(async () => {
   cursor: pointer;
 }
 </style>
+../../services/api/getData.ts

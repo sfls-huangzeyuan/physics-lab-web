@@ -167,13 +167,13 @@ import Actions from "../components/blocks/Actions.vue";
 import Header from "../components/utils/Header.vue";
 import BlockAndActivity from "../components/blocks/BlockAndActivity.vue";
 import Block from "../components/blocks/Block.vue";
-import { login } from "../services/getData.ts";
+import { login} from "../services/api/getData.ts";
 import Footer from "../components/utils/Footer.vue";
 import { NButton, NModal, NForm, NInput, NFormItemRow, NGi, NGrid } from "naive-ui";
 import router from "../router";
-import targetLink from "../services/targetLink.js";
+import { strToQueryObj as targetLink } from "../services/utils.ts";
 import "../layout/loading.css";
-import "../layout/startPage.css"
+import "../layout/startPage.css";
 
 const showModal = ref(false);
 const loading = ref(true);
@@ -227,9 +227,15 @@ async function loginDecorator(callback: Function) {
     }).value,
     ID: _user.ID,
   };
-  loading.value = false;
 
-  blocks.value = loginResponse.Data.Library.Blocks;
+  if (_user.Nickname != null) {
+    const re = await login(null, null);
+    blocks.value = re.Data.Library.Blocks;
+  } else{
+    blocks.value = loginResponse.Data.Library.Blocks;
+  }
+
+  loading.value = false;
 }
 
 function getItemsPerRow() {
@@ -281,7 +287,6 @@ const memoryMe = ref(false);
 </script>
 
 <style scoped>
-
 /* Header插槽 start */
 .user {
   display: flex;
@@ -354,3 +359,4 @@ const memoryMe = ref(false);
   box-sizing: border-box;
 }
 </style>
+../services/api/getData.ts

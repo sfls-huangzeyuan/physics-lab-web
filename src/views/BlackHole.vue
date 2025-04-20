@@ -45,9 +45,9 @@ import Header from "../components/utils/Header.vue";
 import BlockAndActivity from "../components/blocks/BlockAndActivity.vue";
 import Block from "../components/blocks/Block.vue";
 import Footer from "../components/utils/Footer.vue";
-import { getData } from "../services/getData.ts";
+import { getData } from "../services/api/getData.ts";
 import { NGrid, NGi } from "naive-ui";
-import targetLink from "../services/targetLink.js";
+import { strToQueryObj as targetLink } from "../services/utils.ts";
 import "../layout/loading.css";
 import "../layout/startPage.css";
 

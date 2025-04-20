@@ -1,4 +1,4 @@
-import { getData } from "./getData";
+import { getData } from "./api/getData";
 import Emitter from "./eventEmitter";
 import type { Ref } from "vue";
 

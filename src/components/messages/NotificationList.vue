@@ -16,14 +16,13 @@
       ></Notification>
       <n-divider style="margin: 0" />
     </div>
-    <div v-if="loading && !hasLoadEnd" class="text">加载中...</div>
   </n-infinite-scroll>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import Notification from "./NotificationItem.vue";
-import { getData } from "../../services/getData.ts";
+import { getData } from "../../services/api/getData.ts";
 import { getAvatarUrl, saveCache } from "../../services/getUserCurentAvatarByID";
 import type { Ref } from "vue";
 import Emitter from "../../services/eventEmitter";
@@ -282,3 +281,4 @@ handleLoad(false);
   color: #888;
 }
 </style>
+../../services/api/getData.ts

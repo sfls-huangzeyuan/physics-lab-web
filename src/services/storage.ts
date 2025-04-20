@@ -10,7 +10,10 @@ const storageManager = {
     }
   },
 
-  set(key: string, value: any) {
+  set(key: string, value: any, isObject = true) {
+    if (!isObject){
+      localStorage.setItem(key, value);
+    }
     localStorage.setItem(key, JSON.stringify(value));
   },
 

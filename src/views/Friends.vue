@@ -64,7 +64,7 @@ onUnmounted(() => {
 .item {
   position: absolute;
   width: 100%;
-  height: calc(100% - 120px);
+  height: calc(100% - 170px);
   overflow-x: hidden;
   background-color: #ccc3;
 }

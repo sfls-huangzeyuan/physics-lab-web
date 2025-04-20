@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { getData } from "../../services/getData";
+import { getData } from "../../services/api/getData";
 import parse from "../../services/advancedParser.ts";
 import showUserCard from "../../popup/usercard.ts";
 import storageManager from "../../services/storage";
@@ -137,3 +137,4 @@ const deleteMsg = async() => {
   background-color: #f0f0f0;
 }
 </style>
+../../services/api/getData.ts

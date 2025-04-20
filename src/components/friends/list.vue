@@ -1,5 +1,5 @@
 <template>
-  <n-infinite-scroll :distance="10" @load="handleLoad" style="height: 100%" >
+  <n-infinite-scroll :distance="10" @load="handleLoad" >
     <n-grid :cols="cols || 2">
       <n-gi v-for="user in relations" :key="user.User.ID">
         <UserItem :user="user.User" />
@@ -7,12 +7,11 @@
     </n-grid>
   </n-infinite-scroll>
 </template>
-
 <script setup lang="ts">
 import UserItem from "./item.vue";
 import { NInfiniteScroll, NGrid, NGi } from "naive-ui";
 import { ref } from "vue";
-import { getData } from "../../services/getData.ts";
+import { getData } from "../../services/api/getData.ts";
 import Emitter from "../../services/eventEmitter";
 
 const { userid, type } = defineProps({
