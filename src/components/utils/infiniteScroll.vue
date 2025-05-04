@@ -39,6 +39,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  marginTop: {
+    type: Number,
+    default: -800,
+  },
 });
 
 const emit = defineEmits(["load"]);
@@ -67,6 +71,7 @@ const initObserver = () => {
   );
 
   if (sentinel.value) observer.observe(sentinel.value);
+  sentinel.value?.style.setProperty("margin-top", props.marginTop + "px");
 };
 
 const handleLoad = async () => {
@@ -114,7 +119,8 @@ defineExpose({ reset });
 .observer-element {
   height: 10px;
   visibility: hidden;
-  margin-top: -800px;
+  /* background-color: red; */
+  margin-top: -100px;
 }
 
 .status-text {

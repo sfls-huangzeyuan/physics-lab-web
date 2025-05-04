@@ -1,5 +1,5 @@
 <template>
-  <infiniteScroll :initial-items="initialData" @load="handleLoad">
+  <infiniteScroll :initial-items="items" @load="handleLoad" :has-more="!noMore" :margin-top="-200">
     <template #default="{ items }">
       <n-grid :cols="cols || 2">
         <n-gi v-for="user in items as User[]" :key="user.User.ID">
@@ -30,13 +30,13 @@ const { userid, type } = defineProps({
 
 let loading = ref(false);
 let skip = 0;
-let isLoadEnd = false;
+let noMore = false;
 let hasInformed = false;
-const initialData = ref<User[]>([]);
+const items = ref<User[]>([]);
 
 async function handleLoad() {
   loading.value = true;
-  if (isLoadEnd) {
+  if (noMore) {
     hasInformed || Emitter.emit("warning", "没有更多了", 1);
     hasInformed = true;
     return;
@@ -49,11 +49,11 @@ async function handleLoad() {
     Query: "",
   });
   if (getRelationsRes.Data.$values.length < 24) {
-    isLoadEnd = true;
+    noMore = true;
   }
   loading.value = false;
   skip += 24;
-  initialData.value = [...initialData.value, ...getRelationsRes.Data.$values];
+  items.value = [...items.value, ...getRelationsRes.Data.$values];
 }
 
 handleLoad();
