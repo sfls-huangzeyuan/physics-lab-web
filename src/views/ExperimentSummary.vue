@@ -266,4 +266,3 @@ div {
   box-sizing: border-box;
 }
 </style>
-../services/api/getData.ts

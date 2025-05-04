@@ -54,6 +54,6 @@ import Footer from "../components/utils/Footer.vue";
 
 .item {
   box-sizing: border-box;
-  height: calc(100dvh - 150px);
+  height: calc(100dvh - 170px);
 }
 </style>

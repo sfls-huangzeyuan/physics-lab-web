@@ -1,18 +1,26 @@
 <template>
-  <n-infinite-scroll :distance="10" @load="handleLoad" >
-    <n-grid :cols="cols || 2">
-      <n-gi v-for="user in relations" :key="user.User.ID">
-        <UserItem :user="user.User" />
-      </n-gi>
-    </n-grid>
-  </n-infinite-scroll>
+  <infiniteScroll :initial-items="initialData" @load="handleLoad">
+    <template #default="{ items }">
+      <n-grid :cols="cols || 2">
+        <n-gi v-for="user in items as User[]" :key="user.User.ID">
+          <UserItem :user="user.User" />
+        </n-gi>
+      </n-grid>
+    </template>
+  </infiniteScroll>
 </template>
+
 <script setup lang="ts">
 import UserItem from "./item.vue";
-import { NInfiniteScroll, NGrid, NGi } from "naive-ui";
+import { NGrid, NGi } from "naive-ui";
 import { ref } from "vue";
 import { getData } from "../../services/api/getData.ts";
 import Emitter from "../../services/eventEmitter";
+import infiniteScroll from "../utils/infiniteScroll.vue";
+
+interface User {
+  User: any;
+}
 
 const { userid, type } = defineProps({
   userid: String,
@@ -20,11 +28,11 @@ const { userid, type } = defineProps({
   cols: Number,
 });
 
-let relations = ref<any>([]);
 let loading = ref(false);
 let skip = 0;
 let isLoadEnd = false;
 let hasInformed = false;
+const initialData = ref<User[]>([]);
 
 async function handleLoad() {
   loading.value = true;
@@ -45,7 +53,7 @@ async function handleLoad() {
   }
   loading.value = false;
   skip += 24;
-  relations.value.push(...getRelationsRes.Data.$values);
+  initialData.value = [...initialData.value, ...getRelationsRes.Data.$values];
 }
 
 handleLoad();
