@@ -1,7 +1,7 @@
 <template>
   <InfiniteScroll :has-more="!noMore" :initial-items="items" @load="handleLoad">
     <template #default="{ items }">
-      <div  v-for="item in items as MessageItem[]" :key="item.id">
+      <div v-for="item in items as MessageItem[]" :key="item.id">
         <MessageItem
           :avatar_url="item.avatar_url"
           :msg_title="item.msg_title"
@@ -86,7 +86,11 @@ const handleLoad = async () => {
   const defaultItems = messages.map(
     (message: any): MessageItem => ({
       id: message.ID,
-      avatar_url: getUserUrl(message),
+      avatar_url: getUserUrl({
+        Verification: message.Verification,
+        Avatar: message.Avatar,
+        ID: message.UserID,
+      }),
       msg_title: message.Nickname,
       msg: message.Content,
       userID: message.UserID,

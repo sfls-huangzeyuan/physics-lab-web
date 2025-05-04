@@ -43,6 +43,7 @@
 import { ref, onMounted } from "vue";
 import { getData } from "../../services/api/getData.ts";
 import Emitter from "../../services/eventEmitter";
+import { getUserUrl } from "../../services/utils";
 
 const props = defineProps({
   userid: String,
@@ -70,13 +71,7 @@ onMounted(async () => {
   const data = re.Data.User;
   name.value = data.Nickname;
   snt.value = data.Signature;
-  avatar.value =
-    data.Avatar === 0
-      ? "/assets/user/default-avatar.png"
-      : `/static/users/avatars/${data.ID.slice(0, 4)}/${data.ID.slice(4, 6)}/${data.ID.slice(
-          6,
-          8
-        )}/${data.ID.slice(8, 24)}/${data.Avatar}.jpg`;
+  avatar.value = getUserUrl(data);
   followingCount.value = re.Data.Statistic.FollowingCount;
   followerCount.value = re.Data.Statistic.FollowerCount;
   postCount.value = re.Data.Statistic.ExperimentCount;

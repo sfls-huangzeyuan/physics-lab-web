@@ -4,7 +4,7 @@
       <div class="user" @click="showModalFn">
         <img
           class="avatar"
-          :src="user.avatarUrl || getPath('/@root/assets/user/default-avatar.png')"
+          :src="user.avatarUrl || getPath('/@base/assets/user/default-avatar.png')"
           alt="Avatar"
         />
         <!-- 用户刚刚解封会出现图片404，或许日后要把这个逻辑改为获取用户上一张头像，先暂时用默认头像 -->
@@ -162,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import Actions from "../components/blocks/Actions.vue";
 import Header from "../components/utils/Header.vue";
 import BlockAndActivity from "../components/blocks/BlockAndActivity.vue";
@@ -173,6 +173,7 @@ import { NButton, NModal, NForm, NInput, NFormItemRow, NGi, NGrid } from "naive-
 import router from "../router";
 import { strToQueryObj as targetLink } from "../services/utils.ts";
 import getPath from "../services/getPath";
+import { getUserUrl } from "../services/utils.ts";
 import "../layout/loading.css";
 import "../layout/startPage.css";
 
@@ -219,13 +220,7 @@ async function loginDecorator(callback: Function) {
     gems: _user.Diamond,
     level: _user.Level,
     username: _user.Nickname || "点击登录",
-    avatarUrl: computed(() => {
-      if (_user.Avatar === 0) return "/assets/user/default-avatar.png"; //默认头像
-      return `/static/users/avatars/${_user.ID.slice(0, 4)}/${_user.ID.slice(
-        4,
-        6
-      )}/${_user.ID.slice(6, 8)}/${_user.ID.slice(8, 24)}/${_user.Avatar}.jpg!small.round`;
-    }).value,
+    avatarUrl: getUserUrl(_user),
     ID: _user.ID,
   };
 
@@ -360,4 +355,3 @@ const memoryMe = ref(false);
   box-sizing: border-box;
 }
 </style>
-../services/api/getData.ts
