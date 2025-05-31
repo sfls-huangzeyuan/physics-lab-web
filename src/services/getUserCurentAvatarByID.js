@@ -1,6 +1,7 @@
-import { getData } from "./getData";
+import { getData } from "./api/getData";
+import { getUserUrl } from "./utils";
 
-let cache = JSON.parse(localStorage.getItem("userIDAndAvartarIDMap")) || {}
+let cache = JSON.parse(localStorage.getItem("userIDAndAvartarIDMap")) || {};
 
 /**
  * 根据ID获取用户头像，默认缓存，三秒超时，调用本操作后，请等待全部异步结束之后调用saveCache()
@@ -29,10 +30,7 @@ export async function getAvatarUrl(ID, useCache = true) {
       });
 
       // 使用Promise.race来处理请求和超时
-      const response = await Promise.race([
-        getData("/Users/GetUser", { ID }),
-        timeoutPromise
-      ]);
+      const response = await Promise.race([getData("/Users/GetUser", { ID }), timeoutPromise]);
 
       avatarIndex = response.Data.User.Avatar;
       cache[ID] = [avatarIndex, Date.now()];
@@ -40,15 +38,11 @@ export async function getAvatarUrl(ID, useCache = true) {
     } catch (error) {
       console.error("获取头像失败", error);
       // 返回默认头像的URL
-      return "/src/assets/user/default-avatar.png";
+      return "/assets/user/default-avatar.png";
     }
   }
-  return avatarIndex === 0
-    ? "/src/assets/user/default-avatar.png"
-    : `/static/users/avatars/${ID.slice(0, 4)}/${ID.slice(4, 6)}/${ID.slice(6, 8)}/${ID.slice(
-        8,
-        24
-      )}/${avatarIndex}.jpg!small.round`;
+  const user = { ID, Avatar: avatarIndex };
+  return getUserUrl(user);
 }
 
 export function saveCache() {

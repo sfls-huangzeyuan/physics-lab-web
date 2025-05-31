@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
+import Emitter from "../services/eventEmitter";
 import Home from "../views/Home.vue";
 
 const routes = [
@@ -48,6 +49,12 @@ const routes = [
     path: "/friends",
     name: "friends",
     component: () => import("../views/Friends.vue"),
+    meta: { keepAlive: false },
+  },
+  {
+    path: "/list/:config",
+    name: "list",
+    component: () => import("../views/WorkList.vue"),
     meta: { keepAlive: true },
   },
   {
@@ -58,8 +65,25 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory("/Physics-Lab-Web/"),
   routes,
+});
+
+// router.beforeEach((to, from, next) => {
+//   if (to.name === 'Home') {
+//     // 预加载
+//     Promise.all([
+//       import('../components/messages/MessageList.vue')
+//     ]).then(() => {
+//       next();
+//     });
+//   } else {
+//     next();
+//   }
+// });
+
+Emitter.on("loginRequired", () => {
+  router.push("/");
 });
 
 export default router;

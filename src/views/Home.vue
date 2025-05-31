@@ -4,9 +4,8 @@
       <div class="user" @click="showModalFn">
         <img
           class="avatar"
-          :src="user.avatarUrl"
+          :src="user.avatarUrl || getPath('/@base/assets/user/default-avatar.png')"
           alt="Avatar"
-          onerror="this.src='/src/assets/user/default-avatar.png'"
         />
         <!-- 用户刚刚解封会出现图片404，或许日后要把这个逻辑改为获取用户上一张头像，先暂时用默认头像 -->
         <div class="user-info">
@@ -15,11 +14,11 @@
         </div>
         <div class="resources">
           <div class="resource">
-            <img class="icon" src="/src/assets/icons/coins.png" alt="Coins" />
+            <img class="icon" :src="getPath('/@base/assets/icons/coins.png')" alt="Coins" />
             <span>{{ user.coins }}</span>
           </div>
           <div class="resource">
-            <img class="icon" src="/src/assets/icons/gems.png" alt="Gems" />
+            <img class="icon gems" :src="getPath('/@base/assets/icons/gems.png')" alt="Gems" />
             <span>{{ user.gems }}</span>
           </div>
         </div>
@@ -27,31 +26,36 @@
     </Header>
     <!-- 高度：50px定值 -->
     <main>
-      <div class="block-container">
-        <div class="block" id="actions">
-          <Actions></Actions>
-        </div>
-        <div class="block">
-          <BlockAndActivity
-            :projects="featured"
-            projectsName="精选实验"
-            activityBackground="src/assets/support.png"
-            activityName="每日活动"
-          ></BlockAndActivity>
-        </div>
-        <div class="block">
-          <Block :data="popularItems" title="热门实验" blockType="experiments"></Block>
-        </div>
-        <div class="block">
-          <Block :data="knowledgeItems" title="知识库" blockType="experiments"></Block>
-        </div>
-        <div class="block">
-          <Block :data="newestItems" title="最新作品" blockType="experiments"></Block>
-        </div>
-        <div class="block">
-          <Block :data="smallItems" title="小作品" blockType="experiments"></Block>
-          <!-- 紫兰斋的翻译确实是small -->
-        </div>
+      <div class="loading" v-if="loading"></div>
+      <div class="block-container" v-if="!loading">
+        <n-grid :x-gap="12" :y-gap="12" :cols="itemsPerRow">
+          <n-gi>
+            <Actions />
+          </n-gi>
+          <n-gi
+            v-for="block in  blocks.filter((i:any)=>i.Summaries.length > 0)"
+            :key="block.Subject"
+          >
+            <div class="block">
+              <BlockAndActivity
+                v-if="block.$type.startsWith('Quantum.Models.Contents.TopicBlock')"
+                type="Discussion"
+                :projects="block.Summaries"
+                :activityName="block.AuxiliaryText"
+                :activityBackground="getPath('/@base/assets/support.png')"
+                :projectsName="block.Subject"
+                :link="targetLink(block.TargetLink)"
+              />
+              <Block
+                v-else
+                type="Discussion"
+                :data="block.Summaries.slice(0, 5)"
+                :title="block.Header"
+                :link="targetLink(block.TargetLink)"
+              />
+            </div>
+          </n-gi>
+        </n-grid>
       </div>
     </main>
     <n-modal v-model:show="showModal" style="border-radius: 10px">
@@ -75,7 +79,7 @@
                   clearable
                 >
                   <template #suffix>
-                    <img src="/src/assets/login/icon-login.png" width="15px" />
+                    <img src="/assets/login/icon-login.png" width="15px" />
                   </template>
                 </n-input>
               </n-form-item-row>
@@ -123,7 +127,7 @@
               <n-form-item-row>
                 <n-input placeholder="邮箱" class="inputArea" clearable disabled>
                   <template #suffix>
-                    <img src="/src/assets/login/icon-login.png" width="15px" />
+                    <img src="/assets/login/icon-login.png" width="15px" />
                   </template>
                 </n-input>
               </n-form-item-row>
@@ -158,105 +162,51 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
-import Actions from "../components/Actions.vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import Actions from "../components/blocks/Actions.vue";
 import Header from "../components/utils/Header.vue";
-import BlockAndActivity from "../components/BlockAndActivity.vue";
-import Block from "../components/Block.vue";
-import { login } from "../services/getData";
-import Footer from "../components/Footer.vue";
-import { NButton, NModal, NForm, NInput, NFormItemRow } from "naive-ui";
+import BlockAndActivity from "../components/blocks/BlockAndActivity.vue";
+import Block from "../components/blocks/Block.vue";
+import { login } from "../services/api/getData.ts";
+import Footer from "../components/utils/Footer.vue";
+import { NButton, NModal, NForm, NInput, NFormItemRow, NGi, NGrid } from "naive-ui";
+import router from "../router";
+import { strToQueryObj as targetLink } from "../services/utils.ts";
+import getPath from "../services/getPath";
+import { getUserUrl } from "../services/utils.ts";
+import "../layout/loading.css";
+import "../layout/startPage.css";
 
-let showModal = ref(false);
+const showModal = ref(false);
+const loading = ref(true);
+const blocks = ref<any>([]);
+const username = ref("");
+const password = ref("");
+const token = ref("");
+const authCode = ref("");
 
-// 默认配置
-let user = ref({
+const user = ref({
   coins: 12345,
   gems: 12345,
   level: 12,
   username: "点击登录",
-  avatarUrl: "/src/assets/user/default-avatar.png",
+  avatarUrl: getPath("/@base/assets/user/default-avatar.png"),
+  ID: "",
 });
-let featured = ref(
-  new Array(3).fill({
-    Tags: ["正在加载"],
-    Subject: "Loading...",
-    User: {
-      ID: "6779f4d8826568de4e986a53",
-      Nickname: "loading...",
-    },
-    ID: "6779f4d8826568de4e986a53",
-    Category: "Discussion",
-    Image: 0,
-  })
-);
-let knowledgeItems = ref(
-  new Array(5).fill({
-    Tags: ["正在加载"],
-    Subject: "Loading...",
-    User: {
-      ID: "6779f4d8826568de4e986a53",
-      Nickname: "loading...",
-    },
-    ID: "6779f4d8826568de4e986a53",
-    Category: "Discussion",
-    Image: 0,
-  })
-);
-let popularItems = ref(
-  new Array(5).fill({
-    Tags: ["正在加载"],
-    Subject: "Loading...",
-    User: {
-      ID: "6779f4d8826566de4e986a53",
-      Nickname: "loading...",
-    },
-    ID: "6779f4d8826568de4e986a53",
-    Category: "Discussion",
-    Image: 0,
-  })
-);
-let newestItems = ref(
-  new Array(5).fill({
-    Tags: ["正在加载"],
-    Subject: "Loading...",
-    User: {
-      ID: "6779f4d8826568de4e986a53",
-      Nickname: "loading...",
-    },
-    ID: "6779f4d8826568de4e986a53",
-    Category: "Discussion",
-    Image: 0,
-  })
-);
-let smallItems = ref(
-  new Array(5).fill({
-    Tags: ["正在加载"],
-    Subject: "Loading...",
-    User: {
-      ID: "6779f4d8826568de4e986a53",
-      Nickname: "loading...",
-    },
-    ID: "6779f4d8826568de4e986a53",
-    Category: "Discussion",
-    Image: 0,
-  })
-);
+
+const itemsPerRow = ref(getItemsPerRow());
 
 /* A template for login's logic
  * @param callback(async function): Injected dependence of login (to support both password and token login style)
  */
 async function loginDecorator(callback: Function) {
-  window.$message.loading("正在登录请稍候", { duration: 3e3 });
   const loginResponse = await callback();
   if (loginResponse.Status != 200) {
-    window.$message.error(loginResponse.Message);
     localStorage.setItem("loginStatus", "false");
-    // await _login(null, null);
     return;
   }
-  if (memoryMe.value == false && localStorage.getItem("token") == "undefined") {
-    // 只有在主动登录时才有这一步判断
+  if (memoryMe.value == false && localStorage.getItem("loginSatus") === "false") {
+    // 只有在主动登录时才有这一步判断，略去undifined或null
     localStorage.setItem("loginStatus", "false");
   } else {
     localStorage.setItem("token", loginResponse.Token);
@@ -270,24 +220,35 @@ async function loginDecorator(callback: Function) {
     gems: _user.Diamond,
     level: _user.Level,
     username: _user.Nickname || "点击登录",
-    avatarUrl: computed(() => {
-      if (_user.Avatar === 0) return "/src/assets/user/default-avatar.png"; //默认头像
-      return `/static/users/avatars/${_user.ID.slice(0, 4)}/${_user.ID.slice(
-        4,
-        6
-      )}/${_user.ID.slice(6, 8)}/${_user.ID.slice(8, 24)}/${_user.Avatar}.jpg!small.round`;
-    }).value,
+    avatarUrl: getUserUrl(_user),
+    ID: _user.ID,
   };
 
-  const blocks = loginResponse.Data.Library.Blocks;
-  featured.value = blocks[1].Summaries.slice(0, 3);
-  popularItems.value = blocks[2].Summaries.slice(0, 5);
-  knowledgeItems.value = blocks[3].Summaries.slice(0, 5);
-  newestItems.value = blocks[4].Summaries.slice(0, 5);
-  smallItems.value = blocks[5].Summaries.slice(0, 5);
+  if (_user.Nickname != null) {
+    const re = await login(null, null);
+    blocks.value = re.Data.Library.Blocks;
+  } else {
+    blocks.value = loginResponse.Data.Library.Blocks;
+  }
+
+  loading.value = false;
 }
 
+function getItemsPerRow() {
+  const width = window.innerWidth;
+  return width >= 800 ? 3 : width >= 500 ? 2 : 1;
+}
+
+const handleResize = () => {
+  itemsPerRow.value = getItemsPerRow();
+};
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
+
 onMounted(async () => {
+  window.addEventListener("resize", handleResize);
   await loginDecorator(async () => {
     let _data = undefined;
     _data = await login(localStorage.getItem("token"), localStorage.getItem("authCode"), true);
@@ -303,14 +264,10 @@ onMounted(async () => {
 });
 
 function showModalFn() {
-  localStorage.getItem("loginStatus") != "true" && (showModal.value = true);
+  localStorage.getItem("loginStatus") === "true"
+    ? router.push(`/profile/${user.value.ID}`)
+    : (showModal.value = true);
 }
-
-const username = ref("");
-const password = ref("");
-
-const token = ref("");
-const authCode = ref("");
 
 async function pswdLogin() {
   await loginDecorator(async () => login(username.value, password.value));
@@ -326,14 +283,7 @@ const memoryMe = ref(false);
 </script>
 
 <style scoped>
-
-@import "./home.css";
-
-#home {
-  margin-bottom: 70px;
-  /* 防止底部导航栏覆盖 */
-}
-
+/* Header插槽 start */
 .user {
   display: flex;
   align-items: center;
@@ -378,6 +328,13 @@ const memoryMe = ref(false);
   margin-left: 5px;
 }
 
+.gems {
+  height: 28px;
+  width: 28px;
+}
+/* Header插槽 end */
+
+/* 登录表单 start */
 .inputArea {
   margin: 1%;
   padding: 0;
@@ -390,5 +347,11 @@ const memoryMe = ref(false);
   margin-top: 10px;
   border: none;
   border-radius: 10px;
+}
+
+/* 登录表单 end */
+
+.div {
+  box-sizing: border-box;
 }
 </style>

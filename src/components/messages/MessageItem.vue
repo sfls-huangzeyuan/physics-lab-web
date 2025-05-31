@@ -1,56 +1,63 @@
 <template>
   <div id="notification_container" @click="handleReply">
     <div class="img">
-      <img
-        :src="avatar_url"
-        id="avatar"
-        onerror="this.src='/src/assets/user/default-avatar.png'"
-        @click="showUserCard(userID as string)"
-      />
+      <img :src="avatar_url" id="avatar" @click="showUserCard(userID as string)" />
     </div>
     <div id="notification" class="notification">
       <div id="notification_title" class="notification_title">
-        {{ msg_title }}
+        <div class="name">{{ msg_title }}</div>
+        <div class="delete" @click="deleteMsg" v-if="currentUserId === userID">删除</div>
       </div>
-      <div id="notification_message" class="notification_message" @click="handleClick">
-        <div id="notification_text" class="notification_text" v-html="parse(msg)"></div>
+      <div id="notification_message" class="notification_message">
+        <div
+          id="notification_text"
+          class="notification_text"
+          v-html="parse(msg as string,true)"
+        ></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import parse from "../../services/richTextParser.ts";
+import { getData } from "../../services/api/getData";
+import parse from "../../services/advancedParser.ts";
 import showUserCard from "../../popup/usercard.ts";
+import storageManager from "../../services/storage";
 
 // 解构传递的props
-const { id, userID } = defineProps({
+const { id, userID, type } = defineProps({
   avatar_url: String,
   msg: String,
   msg_title: String,
   id: String,
   userID: String,
+  type: String,
 });
 
 // 用于回复
-const emit = defineEmits(["msgClick"]);
+const emit = defineEmits(["msgClick","deleteMsg"]);
 
 const handleReply = () => {
   emit("msgClick", id);
 };
 
-const handleClick = (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-  if (target.classList.contains("RUser")) {
-    alert(target.dataset.user);
-  }
+const currentUserId = storageManager.get("userID", false);
+const deleteMsg = async() => {
+  await getData("Messages/RemoveComment", {
+    TargetType: type,
+    CommentID: id,
+  });
+  emit("deleteMsg", id);
 };
 </script>
 
 <style scoped>
 #notification_container {
   height: fit-content;
-  padding: 5px;
+  width:calc(100% - 5px);
+  margin-left: 5px;
+  margin-top:5px;
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -88,10 +95,20 @@ const handleClick = (event: MouseEvent) => {
 }
 
 #notification_title {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
   font-size: 1em;
   margin-right: auto;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.delete {
+  margin-left: auto;
+  padding-right: 15px;
+  color: red;
+  font-weight: lighter;
 }
 
 #notification_message {
@@ -120,5 +137,8 @@ const handleClick = (event: MouseEvent) => {
 
 #notification_container:hover {
   background-color: #f0f0f0;
+}
+div{
+  box-sizing: border-box;
 }
 </style>

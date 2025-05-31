@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="handleClick">
     <n-message-provider>
       <Msg />
     </n-message-provider>
@@ -13,8 +13,18 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Msg from "./components/popup/msg.vue";
+import getPath from "./services/getPath.ts";
+import showUserCard from "./popup/usercard.ts"
+window.$getPath = getPath;
+
+const handleClick = (event: MouseEvent) => {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains("RUser")) {
+    showUserCard(target.dataset.user || "")
+  }
+};
 </script>
 
 <style>
@@ -32,24 +42,4 @@ body {
   background-color: white;
 }
 
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #f8f9fa;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-footer a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-footer a.router-link-exact-active {
-  color: #42b983;
-  font-weight: bold;
-}
-</style>
+</style>./services/api/getPath.ts

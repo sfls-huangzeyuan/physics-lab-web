@@ -1,11 +1,11 @@
 <template>
   <Header>
     <div class="header">
-      <img src="/src/assets/library/Navigation-Return.png" style="width: 3em" @click="goBack" />
+      <img src="/assets/library/Navigation-Return.png" style="width: 3em" @click="goBack" />
       <div class="title">
         {{ title }}
       </div>
-      <img src="/src/assets/library/Button-Category.png" style="width: 3em; margin-left: auto" />
+      <img src="/assets/library/Button-Category.png" style="width: 3em; margin-left: auto" />
     </div>
   </Header>
   <div class="list">
@@ -23,7 +23,7 @@
       type="text"
       placeholder="发布一条友善的言论"
       show-count
-      :maxlength="40"
+      :maxlength="300"
       @keyup.enter="handleEnter"
       :loading="isLoading"
     />
@@ -35,8 +35,8 @@ import { ref } from "vue";
 import MessagesList from "../components/messages/MessageList.vue";
 import { useRoute } from "vue-router";
 import Header from "../components/utils/Header.vue";
-import parse from "../services/richTextParser";
-import { getData } from "../services/getData";
+import parse from "../services/commonParser.ts";
+import postComment from "../services/postComment.ts";
 
 const route = useRoute();
 let isLoading = ref(false);
@@ -56,24 +56,15 @@ function handleMsgClick(item: any) {
   comment.value = `回复@${item.msg_title}: `;
 }
 
-// 新增方法：处理回车键按下事件
 const handleEnter = async () => {
-  isLoading.value = true; // 设置 loading 状态为 true
-  const sendCommentResponse = await getData("/Messages/PostComment", {
-    TargetID: route.params.id,
-    TargetType: route.params.category,
-    Content: comment.value || "",
-    ReplyID: replyID || "",
-    Language: "from web",
-    Special: null,
-  });
-  if (sendCommentResponse.Status == 200) {
-    comment.value = "";
-    upDate.value = Math.random();
-  } else {
-    window.$message.error(sendCommentResponse.Message);
-  }
-  isLoading.value = false;
+  await postComment(
+    comment,
+    isLoading,
+    route.params.category as string,
+    route.params.id as string,
+    replyID,
+    upDate
+  );
 };
 </script>
 
@@ -94,7 +85,14 @@ const handleEnter = async () => {
 }
 
 .list {
-  padding-top: 30px;
-  height: calc(100dvh - 50px - 40px);
+  padding-left: 5px;
+  padding-top: 60px;
+  height: calc(100dvh - 50px);
+}
+
+@media (min-aspect-ratio: 1/1) {
+  .list {
+    padding-left: 20px;
+  }
 }
 </style>

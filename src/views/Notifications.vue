@@ -4,8 +4,8 @@
   </Header>
   <main>
     <div class="outer">
-      <n-tabs type="line" class="list" animated>
-        <n-tab-pane name="全部" tab="全部" style="padding: 0">
+      <n-tabs type="line" animated justify-content="space-evenly">
+        <n-tab-pane name="全部" tab="全部">
           <div class="item">
             <NotificationList notificationTypeIndexOfUI="0"></NotificationList>
           </div>
@@ -44,21 +44,22 @@
 <script setup lang="ts">
 import NotificationList from "../components/messages/NotificationList.vue";
 import Header from "../components/utils/Header.vue";
-import Footer from "../components/Footer.vue";
+import Footer from "../components/utils/Footer.vue";
 </script>
 
 <style scoped>
-.list {
-  height: calc(100vh - 120px);
-  margin-top: 60px;
-  width: 96dvw;
-  box-sizing: border-box;
+.outer {
+  margin-top: 50px;
 }
 
-.outer {
-  margin-left: 2vh;
-}
 .item {
-  margin-top: -60px;
+  box-sizing: border-box;
+  height: calc(100dvh - 150px);
+}
+
+@media (min-aspect-ratio: 1/1) {
+  .item {
+    padding-left:20px;
+  }
 }
 </style>

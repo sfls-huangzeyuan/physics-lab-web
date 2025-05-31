@@ -1,17 +1,22 @@
 <template>
   <div class="notification_container">
     <div class="img" @click="showUserCard(uid as string)">
-      <img :src="avatar_url" id="avatar" onerror="this.src='/src/assets/user/default-avatar.png'" />
+      <img :src="avatar_url" id="avatar" />
     </div>
     <div id="notification" class="notification" @click="showComment">
-      <div id="notification_title" class="notification_title" v-html="parse(msg_title)"></div>
+      <div id="notification_title" class="notification_title" v-html="parse(msg_title, true)"></div>
       <div id="notification_message" class="notification_message">
         <div id="notification_icon" class="notification_icon">
           <img :src="msg_icon_url" id="notification_icon" />
         </div>
         <div id="notification_text" class="notification_text">
           <!-- 我认为是在没必要专门再去渲染邮件，所以暂时这样 -->
-          <n-ellipsis expand-trigger="click" line-clamp="2" :tooltip="false" v-html="parse(msg)">
+          <n-ellipsis
+            expand-trigger="click"
+            line-clamp="2"
+            :tooltip="false"
+            v-html="parse(msg, true)"
+          >
           </n-ellipsis>
         </div>
       </div>
@@ -21,9 +26,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import parse from "../../services/richTextParser";
-import showUserCard from "../../popup/usercard.ts"
-
+import parse from "../../services/commonParser.ts";
+import showUserCard from "../../popup/usercard.ts";
 
 // 解构传递的props
 const props = defineProps({
@@ -35,23 +39,22 @@ const props = defineProps({
   category: String,
   name: String,
   uid: String,
-}); 
-
+});
 
 // 计算消息图标路径
 
 const msg_icon_url = computed(() => {
   switch (props.msg_type) {
     case 1:
-      return "src/assets/icons/notifications_system.png"; // 直接返回静态路径
+      return "/assets/icons/notifications_system.png"; // 直接返回静态路径
     case 2:
-      return "src/assets/icons/notifications_comments.png";
+      return "/assets/icons/notifications_comments.png";
     case 3:
-      return "src/assets/icons/notifications_followers.png";
+      return "/assets/icons/notifications_followers.png";
     case 4:
-      return "src/assets/icons/notifications_projects.png";
+      return "/assets/icons/notifications_projects.png";
     case 5:
-      return "src/assets/icons/notifications_admin.png";
+      return "/assets/icons/notifications_admin.png";
     default:
       return "";
   }
@@ -59,16 +62,18 @@ const msg_icon_url = computed(() => {
 
 function showComment() {
   if (props.msg_type === 2) {
-    window.open(`/Comments/${props.category}/${props.tid}/${props.name}`,"_self")
+    window.open(
+      `${window.$getPath("/@root")}/Comments/${props.category}/${props.tid}/${props.name}`,
+      "_self"
+    );
   }
 }
-
 </script>
 
 <style scoped>
 .notification_container {
   height: fit-content;
-  padding: 10px;
+  padding: 0.5em 0 0.5em 0.5em;
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -123,7 +128,7 @@ function showComment() {
 }
 
 #notification_text {
-  font-size: 1em;
+  font-size: 0.9em;
   text-align: left;
   height: fit-content;
 }

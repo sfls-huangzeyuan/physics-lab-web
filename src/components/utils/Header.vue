@@ -29,9 +29,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-
+import Emitter from "../../services/eventEmitter.ts";
 let isFullScreen = ref(false);
 
 const toggleFullScreen = () => {
@@ -48,19 +48,20 @@ const toggleFullScreen = () => {
 
 const logout = () => {
   localStorage.clear();
-  window.$message.info("您已退出登录！");
-  window.location.href = "/";
+  Emitter.emit("info", "您已退出登录！", 1);
+  // 强制刷新
+  window.location.href = window.$getPath("/@root");
+  window.location.reload();
 };
 </script>
 
 <style scoped>
 .header-container {
-  border-radius: 0;
+  height: 50px;
   position: fixed;
   top: 0;
-  padding: 20px 3vw 10px 3vw;
+  padding: 0 3vw 0 3vw;
   font-size: small;
-  height: 30px;
   background-color: white;
   width: 100%;
   z-index: 100;
@@ -75,5 +76,9 @@ const logout = () => {
   cursor: pointer;
   padding-right: 8vw;
   gap: 10px;
+}
+
+.div {
+  box-sizing: border-box;
 }
 </style>

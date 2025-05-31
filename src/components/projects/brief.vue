@@ -7,7 +7,7 @@
     }"
   >
     <div class="card" :type="type">
-      <img :src="imgUrl" class="icon" onerror="this.src='/src/assets/icons/white.png'" />
+      <img :src="imgUrl" class="icon"  />
       <div class="text">
         <p class="title" v-html="parse(data.Subject)"></p>
         <p class="subtitle">{{ data.User.Nickname + "&nbsp;&nbsp;-" + formattedDate }}</p>
@@ -18,20 +18,15 @@
 
 <script setup>
 import { computed } from "vue";
-import parse from "../../services/richTextParser";
+import parse from "../../services/commonParser.ts";
+import { getCoverUrl } from "../../services/utils.ts";
 
 const { data, type } = defineProps({
   data: Object,
   type: String,
 });
 
-const imgUrl = computed(
-  () =>
-    `/static/experiments/images/${data.ID.slice(0, 4)}/${data.ID.slice(4, 6)}/${data.ID.slice(
-      6,
-      8
-    )}/${data.ID.slice(8, 24)}/${data.Image || 0}.jpg!block`
-);
+const imgUrl = getCoverUrl(data);
 const timestamp = computed(() => {
   const hexId = data.ID.slice(0, 8);
   const decimalId = parseInt(hexId, 16);
@@ -50,8 +45,8 @@ const formattedDate = computed(() => {
   display: flex;
   align-items: center;
   background-color: #f0f0f0;
-  padding: 10px;
-  height: 30px;
+  padding: 0 10px;
+  height: 50px;
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -72,9 +67,9 @@ const formattedDate = computed(() => {
   font-size: 12px;
   color: white;
   margin: 0;
-  white-space: nowrap; /* 禁止换行 */
-  overflow: hidden; /* 超出部分隐藏 */
-  text-overflow: ellipsis; /* 显示省略号 */
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
 }
 
 .subtitle {
@@ -87,4 +82,8 @@ a {
   text-decoration: none;
 }
 
-</style>
+.div {
+  box-sizing:border-box;
+}
+
+</style>../../services/utils.ts

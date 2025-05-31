@@ -1,13 +1,16 @@
 <template>
   <div>
-    <div class="container" :style="{
-      backgroundImage: `url(${ProjectsBackground})`,
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
+    <div
+      class="container"
+      :style="{
+        backgroundImage: `url(${ProjectsBackground})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
       }"
+      @click="jump"
     >
       <h2 class="title">{{ projectsName }}</h2>
-      <div class="box">
+      <div class="box" @click.stop="">
         <Works v-for="item in projects" :key="item.ID" :data="item" :type="type"></Works>
       </div>
     </div>
@@ -22,25 +25,24 @@
 </template>
 
 <script setup>
-import Works from "./projects/brief.vue";
-import { computed } from "vue";
-const { projects, type } = defineProps({
+import Works from "../projects/brief.vue";
+import router from "../../router";
+import { getCoverUrl } from "../../services/utils.ts";
+const { projects, type, link } = defineProps({
   projects: Array,
   type: String,
   activityName: String,
   activityBackground: String,
   projectsName: String,
   activityProc: Function,
+  link: String,
 });
 
-const ProjectsBackground = computed(() => {
-  const id = projects[0].ID;
+const ProjectsBackground = getCoverUrl(projects[0]);
 
-  return `/static/experiments/images/${id.slice(0, 4)}/${id.slice(4, 6)}/${id.slice(
-    6,
-    8
-  )}/${id.slice(8, 24)}/0.jpg!block`;
-});
+const jump = () => {
+  router.push(`/list/${link}`);
+};
 </script>
 
 <style scoped>
@@ -98,4 +100,9 @@ const ProjectsBackground = computed(() => {
   padding-left: 20px;
   font-weight: normal;
 }
+
+.div {
+  box-sizing:border-box;
+}
 </style>
+../../services/utils.ts
